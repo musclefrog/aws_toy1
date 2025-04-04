@@ -26,7 +26,7 @@ scrape_configs:
 
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['211.183.3.201:9100', '211.183.3.202:9100', '211.183.3.203:9100']
+      - targets: ['211.183.3.201:8080', '211.183.3.202:8080', '211.183.3.203:8080']
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
