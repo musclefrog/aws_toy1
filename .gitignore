@@ -1,2 +1,5 @@
 opt/prometheus/prometheus
 opt/prometheus/*.tar.gz
+opt/prometheus/data/
+*.log
+opt/prometheus/
