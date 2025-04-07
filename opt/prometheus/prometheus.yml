@@ -22,11 +22,53 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'node_exporter'
     static_configs:
-      - targets: ['211.183.3.201:9100', '211.183.3.202:9100', '211.183.3.203:9100']
+      - targets:
+          - 211.183.3.150:9100
+          - 211.183.3.201:9100
+          - 211.183.3.202:9100
+          - 211.183.3.203:9100
+    relabel_configs:
+          - source_labels: [__address__]
+            regex: 211.183.3.150:9100
+            target_label: instance
+            replacement: manager
+          - source_labels: [__address__]
+            regex: 211.183.3.201:9100
+            target_label: instance
+            replacement: worker1
+          - source_labels: [__address__]
+            regex: 211.183.3.202:9100
+            target_label: instance
+            replacement: worker2
+          - source_labels: [__address__]
+            regex: 211.183.3.203:9100
+            target_label: instance
+            replacement: worker3
 
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['211.183.3.201:8080', '211.183.3.202:8080', '211.183.3.203:8080']
+      - targets: 
+          - 211.183.3.150:8080
+          - 211.183.3.201:8080
+          - 211.183.3.202:8080
+          - 211.183.3.203:8080
+    relabel_configs:
+          - source_labels: [__address__]
+            regex: 211.183.3.150:8080
+            target_label: instance
+            replacement: manager_container
+          - source_labels: [__address__]
+            regex: 211.183.3.201:8080
+            target_label: instance
+            replacement: worker1_container
+          - source_labels: [__address__]
+            regex: 211.183.3.202:8080
+            target_label: instance
+            replacement: worker2_container
+          - source_labels: [__address__]
+            regex: 211.183.3.203:8080
+            target_label: instance
+            replacement: worker3_container
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
