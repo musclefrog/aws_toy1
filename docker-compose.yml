@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: 211.183.3.105:5000/myprome:1.0
     networks:
       - net
     volumes:
@@ -22,7 +22,7 @@ services:
         mode: host
 
   grafana:
-    image: grafana/grafana:latest
+    image: 211.183.3.105:5000/mygrafa:1.0
     networks:
       - net
     volumes:
@@ -43,7 +43,7 @@ services:
 
 
   node_exporter:
-    image: prom/node-exporter:latest
+    image: 211.183.3.105:5000/mynode:1.0
     deploy:
       mode: global  # 모든 노드에서 실행
       restart_policy:
@@ -61,7 +61,7 @@ services:
       - /:/rootfs:ro
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    image: 211.183.3.105:5000/mycad:1.0
     deploy:
       mode: global  # 모든 노드에서 실행
       restart_policy:

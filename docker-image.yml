@@ -1,27 +1,55 @@
 - hosts: all
-  become_user: root
+  become: yes
+  tasks:
+    - name: 각 노드 user1접근 시 sudo 권한 추가 (비밀번호 없이)
+      copy:
+        dest: /etc/sudoers.d/user1
+        content: 'user1 ALL=(ALL) NOPASSWD: ALL'
+        owner: root
+        group: root
+        mode: '0440'
+
+    - name: docker insecure-registry 설정
+      copy:
+        content: |
+          {
+            "insecure-registries": ["211.183.3.105:5000"]
+          }
+        dest: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: docker 재시작
+      systemd:
+        name: docker
+        state: restarted
+        daemon_reload: yes
+ 
+- hosts: all
+  become: yes
   tasks:
     - name: node-exporter 이미지 pull
       docker_image:
-        name: prom/node-exporter
+        name: 211.183.3.105:5000/mynode:1.0
         source: pull
 
     - name: cadvisor 이미지 pull
       docker_image:
-        name: gcr.io/cadvisor/cadvisor:latest
+        name: 211.183.3.105:5000/mycad:1.0
         source: pull
 
 - hosts: manager
-  become_user: root
+  become: yes
   tasks:
     - name: prometheus 이미지 pull
       docker_image:
-        name: prom/prometheus
+        name: 211.183.3.105:5000/myprome:1.0
         source: pull
 
     - name: grafana 이미지 pull
       docker_image:
-        name: grafana/grafana
+        name: 211.183.3.105:5000/mygrafa:1.0
         source: pull
 
 
