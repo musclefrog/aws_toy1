@@ -1,0 +1,64 @@
+---
+- name: Install Jenkins with forced port 7000 (Java 17)
+  hosts: localhost
+  become: yes
+
+  vars:
+    jenkins_port: 7000
+    java_home: /usr/lib/jvm/java-17-openjdk-amd64
+
+  tasks:
+    - name: 🔄 apt update
+      shell: apt update
+      changed_when: false
+
+    - name: 📦 Install Java 17
+      apt:
+        name: openjdk-17-jdk
+        state: present
+
+    - name: 🔑 Add Jenkins GPG key
+      get_url:
+        url: https://pkg.jenkins.io/debian/jenkins.io-2023.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+
+    - name: ➕ Add Jenkins repository
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/"
+        filename: jenkins
+
+    - name: 🔄 apt update again
+      shell: apt update
+      changed_when: false
+
+    - name: 📥 Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: 📁 Create systemd override directory
+      file:
+        path: /etc/systemd/system/jenkins.service.d
+        state: directory
+        mode: '0755'
+
+    - name: ⚙️ Force Jenkins to use port {{ jenkins_port }} (override ExecStart)
+      copy:
+        dest: /etc/systemd/system/jenkins.service.d/override.conf
+        content: |
+          [Service]
+          ExecStart=
+          ExecStart=/usr/bin/java -Djava.awt.headless=true -DJENKINS_HOME=/var/lib/jenkins -jar /usr/share/java/jenkins.war --httpPort={{ jenkins_port }}
+        mode: '0644'
+
+    - name: 🔐 Allow 'jenkins' user to run sudo
+      copy:
+        dest: /etc/sudoers.d/jenkins
+        content: "jenkins ALL=(ALL) NOPASSWD:ALL"
+        mode: '0440'
+
+    - name: 🔄 Reload systemd and restart Jenkins
+      shell: |
+        systemctl daemon-reload
+        systemctl enable jenkins
+        systemctl restart jenkins
