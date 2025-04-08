@@ -1,32 +1,63 @@
 global:
-  scrape_interval: 5s
+  scrape_interval: 15s
 
 scrape_configs:
   - job_name: 'prometheus'
-    scrape_interval: 5s 
+    scrape_interval: 15s 
     static_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'node_exporter'
-    
-    scrape_interval: 5s
-    dns_sd_configs:
-      - names:
-          - 'tasks.monitoring_node_exporter'
-        type: 'A'
-        port: 9100
-
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - 211.183.3.100:9100
+          - 211.183.3.101:9100
+          - 211.183.3.102:9100
+          - 211.183.3.103:9100
+    relabel_configs:
+          - source_labels: [__address__]
+            regex: 211.183.3.100:9100
+            target_label: instance
+            replacement: manager
+          - source_labels: [__address__]
+            regex: 211.183.3.101:9100
+            target_label: instance
+            replacement: worker1
+          - source_labels: [__address__]
+            regex: 211.183.3.102:9100
+            target_label: instance
+            replacement: worker2
+          - source_labels: [__address__]
+            regex: 211.183.3.103:9100
+            target_label: instance
+            replacement: worker3
+   
   - job_name: 'cadvisor'
     scrape_interval: 5s
-    dns_sd_configs:
-      - names:
-          - 'tasks.monitoring_cadvisor'
-        type: 'A'
-        port: 8080
+    static_configs:
+      - targets:
+          - 211.183.3.100:8080
+          - 211.183.3.101:8080
+          - 211.183.3.102:8080
+          - 211.183.3.103:8080
+    relabel_configs:
+          - source_labels: [__address__]
+            regex: 211.183.3.100:8080
+            target_label: instance
+            replacement: manager
+          - source_labels: [__address__]
+            regex: 211.183.3.101:8080
+            target_label: instance
+            replacement: worker1
+          - source_labels: [__address__]
+            regex: 211.183.3.102:8080
+            target_label: instance
+            replacement: worker2
+          - source_labels: [__address__]
+            regex: 211.183.3.103:8080
+            target_label: instance
+            replacement: worker3
       
-  - job_name: "hvhost01" 
-    scrape_interval: 5s 
-    static_configs: 
-    - targets: ["10.1.149.191:9182"]
 
   
