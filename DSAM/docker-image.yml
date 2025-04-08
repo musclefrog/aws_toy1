@@ -1,0 +1,30 @@
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: 이미지 pull (공식 이미지)
+      shell: |
+        docker pull prom/prometheus:v3.2.1
+        docker pull grafana/grafana:11.5.2
+        docker pull quay.io/prometheus/node-exporter:v1.9.0
+        docker pull gcr.io/cadvisor/cadvisor:v0.49.1
+
+    - name: 이미지 태그 지정 (내부 이름)
+      shell: |
+        docker tag prom/prometheus:v3.2.1 myprom:v3.2.1
+        docker tag grafana/grafana:11.5.2 mygrafa:11.5.2
+        docker tag quay.io/prometheus/node-exporter:v1.9.0 mynode:v1.9.0
+        docker tag gcr.io/cadvisor/cadvisor:v0.49.1 mycad:v0.49.1
+
+    - name: 레지스트리용 태그 붙이기
+      shell: |
+        docker tag myprom:v3.2.1 211.183.3.3:5000/myprom:v3.2.1
+        docker tag mygrafa:11.5.2 211.183.3.3:5000/mygrafa:11.5.2
+        docker tag mynode:v1.9.0 211.183.3.3:5000/mynode:v1.9.0
+        docker tag mycad:v0.49.1 211.183.3.3:5000/mycad:v0.49.1
+
+    - name: 이미지 push
+      shell: |
+        docker push 211.183.3.3:5000/myprom:v3.2.1
+        docker push 211.183.3.3:5000/mygrafa:11.5.2
+        docker push 211.183.3.3:5000/mynode:v1.9.0
+        docker push 211.183.3.3:5000/mycad:v0.49.1

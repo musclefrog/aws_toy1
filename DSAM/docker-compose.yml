@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: 211.183.3.3:5000/myprom:v3.2.1
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - target: 9090
+        published: 9090
+        mode: host
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  grafana:
+    image: 211.183.3.3:5000/mygrafa:11.5.2
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - target: 3000
+        published: 3000
+        mode: host
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  node_exporter:
+    image: 211.183.3.3:5000/mynode:v1.9.0
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - net
+    ports:
+      - target: 9100
+        published: 9100
+        mode: host
+    deploy:
+      mode: global
+
+  cadvisor:
+    image: 211.183.3.3:5000/mycad:v0.49.1
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:ro"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+    networks:
+      - net
+    ports:
+      - target: 8080
+        published: 8080
+        mode: host
+    deploy:
+      mode: global
+
+networks:
+  net:
+    driver: overlay
+
+volumes:
+  prometheus_data:
+  grafana_data:
