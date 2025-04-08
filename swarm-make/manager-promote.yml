@@ -1,0 +1,13 @@
+- name: Promote 지정된 노드 (IP 기반으로)
+  hosts: promote_ip
+  gather_facts: no
+  tasks:
+    - name: 내 hostname을 가져옴
+      shell: hostname
+      register: my_hostname
+
+    - name: 매니저에서 promote 수행
+      delegate_to: "{{ groups['manager'][0] }}"
+      become: true
+      shell: docker node promote {{ my_hostname.stdout }}
+

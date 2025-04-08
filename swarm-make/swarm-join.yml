@@ -1,0 +1,38 @@
+- name: Docker Swarm 초기화 및 워커 조인
+  hosts: manager[0]  # 메인 매니저만 swarm init
+  become: true
+  vars:
+    manager_ip: "{{ hostvars[inventory_hostname]['inventory_hostname'] }}"
+  tasks:
+    - name: Docker Swarm 초기화
+      shell: docker swarm init --advertise-addr {{ manager_ip }}
+      register: swarm_result
+      failed_when: swarm_result.rc != 0 and 'already part of a swarm' not in swarm_result.stderr
+
+    - name: 워커 토큰 가져오기
+      shell: docker swarm join-token -q worker
+      register: worker_token
+
+    - name: worker_join.sh 생성
+      copy:
+        dest: /home/user1/worker_join.sh
+        content: |
+          #!/bin/bash
+          docker swarm join --token {{ worker_token.stdout }} {{ manager_ip }}:2377
+        owner: user1
+        group: user1
+        mode: '0755'
+
+    - name: worker_join.sh 배포
+      copy:
+        src: /home/user1/worker_join.sh
+        dest: /home/user1/worker_join.sh
+        mode: '0755'
+      delegate_to: "{{ item }}"
+      loop: "{{ groups['worker'] + groups['manager'][1:] }}"  # 메인 매니저 제외
+
+    - name: 조인 스크립트 실행
+      shell: bash /home/user1/worker_join.sh || true
+      become: true
+      delegate_to: "{{ item }}"
+      loop: "{{ groups['worker'] + groups['manager'][1:] }}"

@@ -1,0 +1,21 @@
+[manager]
+211.183.3.168
+211.183.3.3
+
+[worker]
+211.183.3.201
+211.183.3.202
+211.183.3.203
+
+[all]
+211.183.3.3
+211.183.3.201
+211.183.3.202
+211.183.3.203
+
+[promote_ip]
+211.183.3.3
+
+[all:vars]
+ansible_user=user1
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
