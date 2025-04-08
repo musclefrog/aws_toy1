@@ -2,15 +2,14 @@ version: '3.8'
 
 services:
   prometheus:
-    image: 211.183.3.105:5000/myprome:1.0
+    image: 211.183.3.105:5000/myprome:v3.2.1
     networks:
       - net
     volumes:
        - ./prometheus.yml:/etc/prometheus/prometheus.yml  # 설정 파일 마운트
        - prometheus_data:/prometheus 
     deploy:
-      mode: replicated
-      replicas: 1
+      mode: global
       restart_policy:
         condition: on-failure
       placement:
@@ -22,15 +21,14 @@ services:
         mode: host
 
   grafana:
-    image: 211.183.3.105:5000/mygrafa:1.0
+    image: 211.183.3.105:5000/mygrafa:11.5.2
     networks:
       - net
     volumes:
       - grafana_data:/var/lib/grafana  # 데이터 저장용 볼륨
      
     deploy:
-      mode: replicated
-      replicas: 1
+      mode: global
       restart_policy:
         condition: on-failure
       placement:
@@ -43,7 +41,7 @@ services:
 
 
   node_exporter:
-    image: 211.183.3.105:5000/mynode:1.0
+    image: 211.183.3.105:5000/mynode:v1.9.0
     deploy:
       mode: global  # 모든 노드에서 실행
       restart_policy:
@@ -61,7 +59,7 @@ services:
       - /:/rootfs:ro
 
   cadvisor:
-    image: 211.183.3.105:5000/mycad:1.0
+    image: 211.183.3.105:5000/mycad:v0.49.1
     deploy:
       mode: global  # 모든 노드에서 실행
       restart_policy:
