@@ -40,3 +40,6 @@
       become: true
       delegate_to: "{{ item }}"
       loop: "{{ groups['worker'] }}"
+
+#만일 매니저를 원하면 worker를 승급시킵니다.
+#docker node promote 승급시킬 ip
