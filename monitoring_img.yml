@@ -1,0 +1,25 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: node-exporter 이미지 pull
+      docker_image:
+        name: 211.183.3.105:5000/mynode:1.0
+        source: pull
+
+    - name: cadvisor 이미지 pull
+      docker_image:
+        name: 211.183.3.105:5000/mycad:1.0
+        source: pull
+
+- hosts: manager
+  become: yes
+  tasks:
+    - name: prometheus 이미지 pull
+      docker_image:
+        name: 211.183.3.105:5000/myprome:1.0
+        source: pull
+
+    - name: grafana 이미지 pull
+      docker_image:
+        name: 211.183.3.105:5000/mygrafa:1.0
+        source: pull
