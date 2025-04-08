@@ -1,25 +1,25 @@
-- hosts: all         #모든 노드에 node-exporte/cadvisor 이미지 배포
+- hosts: all        #server.lst의 모든 호스트에게 node-exporter/cadvisor 이미지 Pull      
   become: yes
   tasks:
-    - name: node-exporter이미지 pull
+    - name: pull node-exporter
       docker_image:
         name: 211.183.3.105:5000/mynode:v1.9.0
         source: pull
 
-    - name: cadvisor 이미지 pull
+    - name: pull cadvisor 
       docker_image:
         name: 211.183.3.105:5000/mycad:v0.49.1
         source: pull
 
-- hosts: manager      #매니저 노드에 prometheus/grafana 이미지 배포
+- hosts: manager    #매니저 노드에 prometheus/grafana 이미지 Pull
   become: yes
   tasks:
-    - name: prometheus 이미지 pull
+    - name: pull prometheus 
       docker_image:
         name: 211.183.3.105:5000/myprome:v3.2.1
         source: pull
 
-    - name: grafana 이미지 pull
+    - name: pull grafana
       docker_image:
         name: 211.183.3.105:5000/mygrafa:11.5.2
         source: pull
