@@ -41,5 +41,5 @@
       delegate_to: "{{ item }}"
       loop: "{{ groups['nodes'] }}"
 
-#만일 매니저를 원하면 worker를 승급시킵니다.
-#docker node promote 승급시킬 노드 호스트명명
+# 만약 worker 노드 중 매니저를 추가하고 싶다면 worker를 승격시킵니다.
+# docker node promote 승급시킬 노드 호스트명
