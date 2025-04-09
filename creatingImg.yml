@@ -1,3 +1,4 @@
+# creatingImg.yml (with pip & SDK setup)
 - name: Install pip3 and Docker SDK on all nodes
   hosts: all
   become: yes
