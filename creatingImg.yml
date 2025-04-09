@@ -1,0 +1,45 @@
+- name: Install pip3 and Docker SDK on all nodes
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install pip3
+      apt:
+        name: python3-pip
+        update_cache: yes
+        state: present
+
+    - name: Install Docker SDK for Python
+      pip:
+        name: docker
+        executable: pip3
+
+# 이미지 생성 및 사설 저장소 Push
+- name: Build and push images to private registry (on storage)
+  hosts: storage
+  become: yes
+  tasks:
+    - name: Create private registry
+      shell: |
+        docker ps -a --format '{{.Names}}' | grep -w registry && docker rm -f registry || echo "registry not exists"
+        docker run -d --name registry -p 5000:5000 --restart always registry:2
+
+    - name: Pull public images
+      shell: |
+        docker pull prom/prometheus:v3.2.1
+        docker pull grafana/grafana:11.5.2
+        docker pull quay.io/prometheus/node-exporter:v1.9.0
+        docker pull gcr.io/cadvisor/cadvisor:v0.49.1
+
+    - name: Tag images for private registry
+      shell: |
+        docker tag prom/prometheus:v3.2.1 211.183.3.150:5000/myprome:v3.2.1
+        docker tag grafana/grafana:11.5.2 211.183.3.150:5000/mygrafa:11.5.2
+        docker tag quay.io/prometheus/node-exporter:v1.9.0 211.183.3.150:5000/mynode:v1.9.0
+        docker tag gcr.io/cadvisor/cadvisor:v0.49.1 211.183.3.150:5000/mycad:v0.49.1
+
+    - name: Push images to private registry
+      shell: |
+        docker push 211.183.3.150:5000/myprome:v3.2.1
+        docker push 211.183.3.150:5000/mygrafa:11.5.2
+        docker push 211.183.3.150:5000/mynode:v1.9.0
+        docker push 211.183.3.150:5000/mycad:v0.49.1
