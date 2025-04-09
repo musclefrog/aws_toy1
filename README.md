@@ -14,7 +14,9 @@
 - worker2: 211.183.3.202
 - worker3: 211.183.3.203
 
-- storage: 211.183.3.150                           
+- storage: 211.183.3.150      
+
+```           
 							+-----------------------+
                             |   📦 Storage VM       |
                             |   211.183.3.150       |
@@ -37,6 +39,7 @@
            | 🧱 Worker 1  |    | 🧱 Worker 2 |      | 🧱 Worker 3  |
            | 211.183.3.201 |   | 211.183.3.202 |     | 211.183.3.203 |
            +-------------+     +---------------+     +---------------+
+```
 
 ## 파일 설명
 - README.md: server 환경 소개 및 실행 방식 설명
@@ -72,7 +75,7 @@
 5. manager) Swarm 환경 구성
 	- ansible-playbook -i server.lst swarm-join.yml
 	
-6. manager) submanager, submanager2 매니저로 승격
+6. manager) submanager, submanager2를 매니저로 승격
 	- docker node promote submanager submanager2
 
 7. manager) image 생성 및 사설 registry로 push
