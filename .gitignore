@@ -1,0 +1,3 @@
+opt/prometheus/
+*.log
+!opt/prometheus/prometheus.yml
