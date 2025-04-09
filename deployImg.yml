@@ -1,0 +1,42 @@
+- name: Prepare all nodes (pip3 + Docker SDK)
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install pip3
+      apt:
+        name: python3-pip
+        update_cache: yes
+        state: present
+
+    - name: Install Docker SDK for Python
+      pip:
+        name: docker
+        executable: pip3
+
+- name: Pull node-exporter and cadvisor images on all nodes
+  hosts: all
+  become: yes
+  tasks:
+    - name: Pull node-exporter image
+      community.docker.docker_image:
+        name: 211.183.3.150:5000/mynode:v1.9.0
+        source: pull
+
+    - name: Pull cadvisor image
+      community.docker.docker_image:
+        name: 211.183.3.150:5000/mycad:v0.49.1
+        source: pull
+
+- name: Pull prometheus and grafana images on manager nodes
+  hosts: manager
+  become: yes
+  tasks:
+    - name: Pull prometheus image
+      community.docker.docker_image:
+        name: 211.183.3.150:5000/myprome:v3.2.1
+        source: pull
+
+    - name: Pull grafana image
+      community.docker.docker_image:
+        name: 211.183.3.150:5000/mygrafa:11.5.2
+        source: pull
