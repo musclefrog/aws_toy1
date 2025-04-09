@@ -1,0 +1,29 @@
+- hosts: all
+  become: yes
+  tasks:
+    #각 노드 user1에게게 Sudo권한 사용시 Password 입력을 NO로 설정 -> Ansible 구동 시 각 노드 접근에 대한 막힘을 방지
+    - name: set user1 sudo
+      copy:
+        dest: /etc/sudoers.d/user1
+        content: 'user1 ALL=(ALL) NOPASSWD: ALL'
+        owner: root
+        group: root
+        mode: '0440'
+
+    #Docker 레지스트리 서버(보안이 설정되지 않음)와 HTTP를 통해 연결할 수 있도록 설정
+    - name: docker insecure-registry 
+      copy:
+        content: |
+          {
+            "insecure-registries": ["211.183.3.150:5000"]
+          }
+        dest: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: docker 재시작
+      systemd:
+        name: docker
+        state: restarted
+        daemon_reload: yes

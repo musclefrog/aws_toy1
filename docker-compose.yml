@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: 211.183.3.150:5000/myprome:v3.2.1                # Prometheus 이미지(이미 Pull해옴)
+    networks:
+      - net                                                 # 네트워크 설정
+    volumes:
+       - ./prometheus.yml:/etc/prometheus/prometheus.yml    # 설정 파일을 컨테이너에 마운트
+       - prometheus_data:/prometheus                        # 데이터 볼륨 마운트
+    deploy:
+      mode: global                                          # 모든 노드에서 실행
+      restart_policy:
+        condition: on-failure                               # 실패 시 자동 재시작
+      placement:
+        constraints: [node.role == manager]                 # 매니저 노드에서만 실행
+
+    ports:
+      - target: 9090                                        # 컨테이너 내부 포트
+        published: 9090                                     # 외부 포트(호스트 포트)
+        mode: host                                          # 호스트 모드로 포트 바인딩
+
+  grafana:
+    image: 211.183.3.150:5000/mygrafa:11.5.2
+    networks:
+      - net
+    volumes:
+      - grafana_data:/var/lib/grafana                       # Grafana 데이터 저장용 볼륨
+     
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+        
+    ports:
+      - target: 3000
+        published: 3000
+        mode: host
+
+
+  node_exporter:
+    image: 211.183.3.150:5000/mynode:v1.9.0
+    deploy:
+      mode: global  # 모든 노드에서 실행
+      restart_policy:
+        condition: on-failure
+    ports:
+      - target: 9100
+        published: 9100
+        mode: host
+
+    networks:
+      - net
+    volumes:
+      - /proc:/host/proc:ro                                 # /proc 파일시스템 읽기 전용으로 마운트 & 시스템 정보 수집
+      - /sys:/host/sys:ro                                   # /sys 파일시스템 읽기 전용으로 마운트 & 시스템 정보 수집
+      - /:/rootfs:ro                                        # 루트 파일시스템 읽기 전용으로 마운트 & 호스트 시스템의 전체 파일 시스템을 탐색
+
+  cadvisor:
+    image: 211.183.3.150:5000/mycad:v0.49.1
+    deploy:
+      mode: global  # 모든 노드에서 실행
+      restart_policy:
+        condition: on-failure
+    ports:
+      - target: 8080
+        published: 8080
+        mode: host
+
+    volumes:
+      - "/:/rootfs:ro"                                      # 루트 파일시스템 읽기 전용으로 마운트 & 컨테이너와 그 내부 자원의 메트릭을 수집
+      - "/var/run:/var/run:ro"                              # /var/run 읽기 전용으로 마운트 & 런타임 데이터를 저장하는 디렉터리
+      - "/sys:/sys:ro"                                      # /sys 읽기 전용으로 마운트 & 시스템 하드웨어와 커널 관련 정보를 제공하는 가상 파일시스템
+      - "/var/lib/docker/:/var/lib/docker:ro"               # Docker 관련 데이터 읽기 전용으로 마운트 & 컨테이너 및 이미지 데이터를 저장하는 디렉터리
+
+    networks:
+      - net
+
+networks:
+  net:
+    driver: overlay                                         # Docker Swarm에서 사용하는 오버레이 네트워크
+    attachable: true                                        # 외부 서비스에서 이 네트워크에 연결할 수 있도록 설정
+
+volumes:  
+  # Docker 볼륨으로, 클러스터 내 다른 노드에서도 사용할 수 있으며, 데이터를 지속적으로 보존가능
+  prometheus_data:                                          
+  grafana_data:                                            
