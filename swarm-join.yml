@@ -1,11 +1,11 @@
-- name: Docker Swarm 초기화 및 워커 조인
+- name: Docker Swarm 실행 및 워커 조인
   hosts: 211.183.3.100  # 메인 매니저 IP 직접 지정
   become: true
   vars:
     manager_ip: "{{ inventory_hostname }}"
 
   tasks:
-    - name: Docker Swarm 초기화
+    - name: Docker Swarm 실행
       shell: docker swarm init --advertise-addr {{ manager_ip }}
       register: swarm_result
       failed_when: swarm_result.rc != 0 and 'already part of a swarm' not in swarm_result.stderr
@@ -42,4 +42,4 @@
       loop: "{{ groups['nodes'] }}"
 
 # 만약 worker 노드 중 매니저를 추가하고 싶다면 worker를 승격시킵니다.
-# docker node promote 승급시킬 노드 호스트명
+# `docker node promote <승급시킬 노드 호스트명>`
