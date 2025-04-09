@@ -4,7 +4,7 @@
 1. 각 노드에 Docker, Docker-Compose 패키지를 설치 & 매니저 노드에 Ansible 설치
 2. docker swarm init/join 등을 통해 Swarm환경 구성하기
 3. registry_set.yml 실행  ####### command를 주형식으로 README 파일을 작성하고 한글로 "registry_set.yml 실행"은 주석처리를 하면 좋겠어요.
-예) ansible-playbook -i server.lst registry_set.yml #registry_set.yml 실행  by 신혜 #######
+예) ansible-playbook -i server.lst registry_set.yml #registry_set.yml -k 실행  by 신혜 #######
    - 각 노드 user1의 Sudo권한 사용시 Password 입력을 NO로 설정 -> Ansible 구동 시 각 노드 접근에 대한 막힘을 방지
    - 사설 Registry Http 접근 허용을 위한 설정파일
 5. creatingImg.yml 실행
