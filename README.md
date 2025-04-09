@@ -1,6 +1,6 @@
 # aws_toy1
 
-< 환경 : Manager노드 1개, Worker노드 3개, Storage노드 1개 >
+< 환경 : Manager노드 2개, Worker노드 3개, Storage노드 1개 >
 1. 각 노드에 Docker, Docker-Compose 패키지를 설치 & 매니저 노드에 Ansible 설치
 2. docker swarm init/join 등을 통해 Swarm환경 구성하기
 3. registry_set.yml 실행
