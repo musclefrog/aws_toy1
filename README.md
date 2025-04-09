@@ -91,7 +91,7 @@
 1. browser) `http://<manager_ip>:9090/targets` 접속
 	- 모든 노드의 cadvisor, node_exporter의 state가 'up' 상태인지 확인
 
-2. browser) `http://<manager_ip>:3000 접속`
+2. browser) `http://<manager_ip>:3000` 접속
 	- menu > Data sources > Add data source > Prometheus 선택
 	- Connection: `http://<manager_ip>:9090`
 	- Save & test
