@@ -15,7 +15,7 @@
       copy:
         content: |
           {
-            "insecure-registries": ["211.183.3.105:5000"]
+            "insecure-registries": ["211.183.3.150:5000"]
           }
         dest: /etc/docker/daemon.json
         owner: root

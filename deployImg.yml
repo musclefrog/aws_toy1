@@ -3,12 +3,12 @@
   tasks:
     - name: pull node-exporter
       docker_image:
-        name: 211.183.3.105:5000/mynode:v1.9.0
+        name: 211.183.3.150:5000/mynode:v1.9.0
         source: pull
 
     - name: pull cadvisor 
       docker_image:
-        name: 211.183.3.105:5000/mycad:v0.49.1
+        name: 211.183.3.150:5000/mycad:v0.49.1
         source: pull
 
 - hosts: manager    #매니저 노드에 prometheus/grafana 이미지 Pull
@@ -16,11 +16,11 @@
   tasks:
     - name: pull prometheus 
       docker_image:
-        name: 211.183.3.105:5000/myprome:v3.2.1
+        name: 211.183.3.150:5000/myprome:v3.2.1
         source: pull
 
     - name: pull grafana
       docker_image:
-        name: 211.183.3.105:5000/mygrafa:11.5.2
+        name: 211.183.3.150:5000/mygrafa:11.5.2
         source: pull
 

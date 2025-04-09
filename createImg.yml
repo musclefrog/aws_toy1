@@ -20,18 +20,18 @@
     # 이미지 커스터마이징
     - name: tag image
       shell: |
-        docker tag prom/prometheus:v3.2.1 211.183.3.105:5000/myprome:v3.2.1
-        docker tag grafana/grafana:11.5.2 211.183.3.105:5000/mygrafa:11.5.2
-        docker tag quay.io/prometheus/node-exporter:v1.9.0 211.183.3.105:5000/mynode:v1.9.0
-        docker tag gcr.io/cadvisor/cadvisor:v0.49.1 211.183.3.105:5000/mycad:v0.49.1
+        docker tag prom/prometheus:v3.2.1 211.183.3.150:5000/myprome:v3.2.1
+        docker tag grafana/grafana:11.5.2 211.183.3.150:5000/mygrafa:11.5.2
+        docker tag quay.io/prometheus/node-exporter:v1.9.0 211.183.3.150:5000/mynode:v1.9.0
+        docker tag gcr.io/cadvisor/cadvisor:v0.49.1 211.183.3.150:5000/mycad:v0.49.1
 
     # 사설 레지스트리로 이미지 Push
     - name: push image
       shell: |
-        docker push 211.183.3.105:5000/myprome:v3.2.1
-        docker push 211.183.3.105:5000/mygrafa:11.5.2
-        docker push 211.183.3.105:5000/mynode:v1.9.0
-        docker push 211.183.3.105:5000/mycad:v0.49.1
+        docker push 211.183.3.150:5000/myprome:v3.2.1
+        docker push 211.183.3.150:5000/mygrafa:11.5.2
+        docker push 211.183.3.150:5000/mynode:v1.9.0
+        docker push 211.183.3.150:5000/mycad:v0.49.1
 
 
 
