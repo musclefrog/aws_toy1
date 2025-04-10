@@ -3,8 +3,8 @@ global:
 
 scrape_configs:
   - job_name: 'prometheus'
-    scrape_interval: 15s                           #Prometheus가 메트릭을 수집하는 기본 주기
-    static_configs:                                #Prometheus자신에 대한 매트릭 수집
+    scrape_interval: 15s                           # Prometheus가 메트릭을 수집하는 기본 주기
+    static_configs:                                # Prometheus 자신에 대한 매트릭 수집
       - targets: 
           - 211.183.3.100:9090
           - 211.183.3.101:9090
@@ -13,7 +13,7 @@ scrape_configs:
   - job_name: 'node_exporter'
     scrape_interval: 15s
     static_configs:
-      - targets:                                   #node_exporter가 설치된 각 서버의 주소 지정 & 해당 IP들에 대해 Prometheus가 메트릭을 수집
+      - targets:                                   # node_exporter가 설치된 각 서버의 주소 지정 & 해당 IP들에 대해 Prometheus가 메트릭을 수집
           - 211.183.3.100:9100
           - 211.183.3.101:9100
           - 211.183.3.102:9100
@@ -22,10 +22,10 @@ scrape_configs:
           - 211.183.3.203:9100
           - 211.183.3.150:9100
     relabel_configs:              
-          - source_labels: [__address__]           #Prometheus가 메트릭을 수집할 대상의 주소를 나타냅니다. 이를 기반으로 라벨을 설정
-            regex: 211.183.3.100:9100              #대상의 주소와 일치하는지 검사
-            target_label: instance                 #Prometheus가 메트릭을 수집한 인스턴스의 이름
-            replacement: manager                   #instance를 manager로 대체
+          - source_labels: [__address__]           # Prometheus가 메트릭을 수집할 대상의 주소를 나타냅니다. 이를 기반으로 라벨을 설정
+            regex: 211.183.3.100:9100              # 대상의 주소와 일치하는지 검사
+            target_label: instance                 # Prometheus가 메트릭을 수집한 인스턴스의 이름
+            replacement: manager                   # instance를 manager로 대체
           - source_labels: [__address__]
             regex: 211.183.3.101:9100
             target_label: instance

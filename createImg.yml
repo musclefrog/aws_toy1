@@ -1,4 +1,4 @@
-- hosts: storage  #이미지 생성 및 사설저장소로 Push
+- hosts: storage  # 이미지 생성 및 사설저장소로 Push
   become: yes
   tasks:
     # 사설 레지스트리 생성
