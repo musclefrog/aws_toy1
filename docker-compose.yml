@@ -84,6 +84,6 @@ networks:
     attachable: true                                        # 외부 서비스에서 이 네트워크에 연결할 수 있도록 설정
 
 volumes:  
-  # Docker 볼륨으로, 클러스터 내 다른 노드에서도 사용할 수 있으며, 데이터를 지속적으로 보존가능
+  # Docker 볼륨으로, 클러스터 내 다른 노드에서도 사용할 수 있으며, 데이터를 지속적으로 보존 가능
   prometheus_data:                                          
   grafana_data:                                            
